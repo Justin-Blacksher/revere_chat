@@ -17,11 +17,12 @@ keyname="server.key"
 encryption="rsa:2048"
 crtout="server.crt"
 # Vanity URL
-vanity=("Foxx" "Hounds" "Turtle" "Eagle" "" "Lakers" "Nets")
+vanity=("Foxx" "Hounds" "Turtle" "Eagle" "Horse" "Frog" "Lizard")
 githublink="https://github.com/cathugger/mkp224o.git"
 vanitygen="mkp224o"
 gen_dir="/usr/local/mkp224o"
-
+# Go libraries 
+go_libraries=("github.com/ProtonMail/gopenpgp/v2@latest")
 
 
 
@@ -59,6 +60,12 @@ function main() {
     log "Vanity requirements started"
     vanity_needful
     log "Vanity requirements met"
+    echo "======= [          END           ] ========"
+    # ==============================
+    echo "======= [  Creating the needful GO] ========"
+    log "GO requirements started"
+    go_needful
+    log "GO requirements met"
     echo "======= [          END           ] ========"
     # ==============================
     end=$(date +%s.%N)
@@ -181,6 +188,27 @@ function run_make() {
     log "Elapsed time: $elapsed seconds"
 }
 
+function go_needful() {
+    log "Grabbing the needed GO libraries"
+    echo "Getting Go Libraries"
+    for library in "${go_libraries[@]}"; do
+        # Get the start time
+        start=$(date +%s.%N)
+
+        # Your commands or function calls go here
+        echo "Now grabbing ........... $library"
+        go install $library
+        wait
+        # Get the end time
+        end=$(date +%s.%N)
+        # Calculate the elapsed time
+        elapsed=$(echo "$end - $start" | bc)
+        echo "Elapsed time: $elapsed seconds"
+        log "Elapsed time: $elapsed seconds"
+    done
+    log "Grabbed all the go libraries"
+    echo "Go libraries have been recieved"
+}
 
 # ========== Main Function ==============
 log "Main function started"

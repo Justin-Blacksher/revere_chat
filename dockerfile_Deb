@@ -1,0 +1,35 @@
+# Use Debian as the base image
+FROM debian:latest
+
+# Create users and groups
+
+
+# Install required packages (OpenSSL, Go, and TOR)
+RUN apt-get update && apt-get install -y openssl golang tor
+RUN apt install -y systemctl
+# Create the working directory
+WORKDIR /usr/local/revere/
+RUN mkdir -p /run/openrc
+RUN touch /run/openrc/softlevel
+# Generate self-signed certificates for the Go server
+
+# Expose and map ports (8443:443)
+EXPOSE 8443
+RUN mkdir -p /etc/tor/
+COPY ./torrc /etc/tor/
+COPY ./torsocks.conf /etc/tor/
+# Set up TOR hidden services
+RUN mkdir /usr/local/revere/certificates/
+
+RUN mkdir -p /usr/local/revere/bin/
+COPY ./setup.sh /usr/local/revere/bin/setup.sh
+
+# Copy the .onion address to a file
+
+# Start TOR
+CMD ["su", "tor", "-c", "tor"]
+
+# Secure permissions
+
+# Additional steps (e.g., copying your Go server code) should be added here
+ENTRYPOINT ["/usr/local/revere/bin/setup.sh"]

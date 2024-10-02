@@ -1,0 +1,34 @@
+#!/bin/bash
+
+# Reboot Tor
+apk add tor &
+echo 'Tor Service is installing'
+wait
+echo 'tor Service has been installed'
+sleep 10
+echo "Tor is ready! Proceed with your script."
+
+
+echo "Tor is ready! Proceed with your script."
+wait
+rc-status -s
+rc-service tor start
+wait
+sleep 5
+rc-status -s
+# Set the environment variables for the program
+if [ -f /var/lib/tor/hidden_service/hostname ]; then
+    export ADDRESS=$(cat /var/lib/tor/hidden_service/hostname)
+    cat /var/lib/tor/hidden_service/hostname
+
+elif [ -f /var/lib/tor/Hidden_Service/hostname ]; then
+    export ADDRESS=$(cat /var/lib/tor/Hidden_Service/hostname)
+
+else
+    echo "No hidden service found!"
+fi
+
+echo $ADDRESS
+
+rc-status -s
+

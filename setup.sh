@@ -7,6 +7,8 @@ important_folders=("/usr/local/mkp224o" "/usr/local/revere/keys" "/run/openrc" "
 # Important files and some nit picky stuff
 openrcfile="softlevel"
 log_file="/usr/local/revere/logfile.txt"
+environemt_file="goenv.sh"
+environment_folder="/etc/profile.d"
 # User for changes in tor folders
 user="tor"
 # Openssl setup
@@ -23,6 +25,7 @@ vanitygen="mkp224o"
 gen_dir="/usr/local/mkp224o"
 # Go libraries 
 go_libraries=("github.com/ProtonMail/gopenpgp/v2@latest")
+# Go Environment Variables
 
 
 
@@ -208,6 +211,14 @@ function go_needful() {
     done
     log "Grabbed all the go libraries"
     echo "Go libraries have been recieved"
+}
+
+function go_env_variables() {
+    log "Setting up Go environment Variables"
+    echo "Setting up GO environment Variables"
+    touch "$environment_folder/$environment_file"
+    log "Environment folder set"
+    echo "Environment folder set"
 }
 
 # ========== Main Function ==============

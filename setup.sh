@@ -1,9 +1,9 @@
 #!/bin/bash
 
 # Dependencies list
-needful_installs=("sudo" "openssl" "go" "build-base" "libsodium-dev" "make" "git" "openrc" "autoconf")
+needful_installs=("gnupg" "sudo" "openssl" "go" "build-base" "libsodium-dev" "make" "git" "openrc" "autoconf")
 # Important folders needed
-important_folders=("/usr/local/mkp224o" "/usr/local/revere/keys" "/run/openrc" "/usr/local/revere" "/usr/local/revere/certificates")
+important_folders=("/usr/local/mkp224o" "/usr/local/revere/keys" "/usr/local/revere/keys/gpg" "/run/openrc" "/usr/local/revere" "/usr/local/revere/certificates")
 # Important files and some nit picky stuff
 openrcfile="softlevel"
 log_file="/usr/local/revere/logfile.txt"
@@ -26,6 +26,16 @@ gen_dir="/usr/local/mkp224o"
 # Go libraries 
 go_libraries=("github.com/ProtonMail/gopenpgp/v2@latest")
 # Go Environment Variables
+# GPG key generation variables
+key_type="RSA"
+key_length="2048"
+expire_date="1y"
+name_UUID=$(uuidgen)
+name_comment="Generated for Revere"
+password=$PASSWORD
+name_email="$name_UUID@revere.com"
+# Environment Variables to set.
+ENV GPG_KEY_LOCATION="/usr/local/revere/keys/gpg/"
 
 
 
@@ -69,6 +79,12 @@ function main() {
     log "GO requirements started"
     go_needful
     log "GO requirements met"
+    echo "======= [          END           ] ========"
+    # ==============================
+    echo "======= [  Creating the needful GPG] ========"
+    log "GPG requirements started"
+    GPG_needful_keys
+    log "GPG requirements met"
     echo "======= [          END           ] ========"
     # ==============================
     end=$(date +%s.%N)
@@ -219,6 +235,32 @@ function go_env_variables() {
     touch "$environment_folder/$environment_file"
     log "Environment folder set"
     echo "Environment folder set"
+}
+
+function GPG_needful_keys() {
+    log "Setting up the GPG keys"
+    echo "Setting up the GPG keys"
+    GPG_Gen
+    log "GPG_Keys Generated"
+    echo "GPG Keys Generated"
+
+}
+
+function GPG_Gen() {
+    log "Exporting GNUPGHOME"
+    export GNUPGHOME="$GPG_KEY_LOCATION"
+    log "Generating Keys"
+    gpg --batch --gen-key <<EOF
+    Key-Type: $key_type
+    Key-Length: $key_length
+    Expire-Date: $expire_date
+    Name-Real: $name_UUID
+    Name-Comment: $name_comment
+    Name-Email: $name_email
+    Passphrase: $password
+    %commit
+EOF
+
 }
 
 # ========== Main Function ==============

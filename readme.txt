@@ -26,3 +26,14 @@ https://github.com/Justin-Blacksher/Xymon-Python.git
 Program Design
 ==============
 
+Secure Messaging.
+
+1. Use TLS and Self Signed Certificates
+2. Utilize Private and Public Keys
+3. Utilize AES encryption
+4. Route traffic through Tor
+5. Digitally sign messages
+6. Blockchain Technology for Integrity 
+7. Docker image deployment with automatic setup
+
+

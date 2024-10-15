@@ -13,6 +13,8 @@ COPY ./torsocks.conf /etc/tor/
 # Set up TOR hidden services
 RUN mkdir -p /usr/local/revere/bin/
 COPY ./setup.sh /usr/local/revere/bin/setup.sh
+# SETUP YOUR PASSWORD HERE TO USE GPG keys
+ENV PASSWORD_GPG=p@ssw0rd
 # Additional steps (e.g., copying your Go server code) should be added here
 ENTRYPOINT [ "/usr/local/revere/bin/setup.sh" ]
 
